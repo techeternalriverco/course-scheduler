@@ -14,4 +14,7 @@ public interface EnrolledCourseRepository extends JpaRepository<EnrolledCourse, 
 
     @Query("SELECT ec.course FROM EnrolledCourse ec WHERE ec.user.id = :userId")
     List<Course> findAllCoursesByUserId(@Param("userId") Long userId);
+
+
+    EnrolledCourse findByUserIdAndCourseId(Long userId, Long courseId);
 }

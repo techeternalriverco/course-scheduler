@@ -4,6 +4,7 @@ import com.example.coursescheduler.entity.Course;
 import com.example.coursescheduler.entity.User;
 import com.example.coursescheduler.service.CourseService;
 import com.example.coursescheduler.service.UserService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -42,8 +43,12 @@ public class UserController {
     // DELETE /users/{userId}/courses/{courseId} - Drop a course for a student
     @DeleteMapping("/{userId}/courses/{courseId}")
     public ResponseEntity<String> dropCourse(@PathVariable Long userId, @PathVariable Long courseId) {
-        courseService.dropCourse(userId, courseId);
-        return ResponseEntity.ok("Course dropped successfully.");
+        try {
+            courseService.dropCourse(userId, courseId);
+            return ResponseEntity.ok("Course dropped successfully.");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
     }
 
     // GET /users/{userId}/courses - List all courses for a student

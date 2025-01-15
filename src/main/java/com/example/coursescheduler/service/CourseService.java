@@ -1,11 +1,13 @@
 package com.example.coursescheduler.service;
 
 import com.example.coursescheduler.entity.Course;
+import com.example.coursescheduler.entity.EnrolledCourse;
 import com.example.coursescheduler.repository.CourseRepository;
 import com.example.coursescheduler.repository.EnrolledCourseRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CourseService {
@@ -30,7 +32,15 @@ public class CourseService {
 
     // 3. Drop a course for a student
     public void dropCourse(Long userId, Long courseId) {
-        // TODO: drop course
+        EnrolledCourse enrolledCourse = enrolledCourseRepository.findByUserIdAndCourseId(userId, courseId);
+
+        if (enrolledCourse == null) {
+            throw new IllegalArgumentException(
+                    "Enrollment not found for userId: " + userId + " and courseId: " + courseId
+            );
+        }
+
+        enrolledCourseRepository.delete(enrolledCourse);
     }
 
     // 4. Book a course for a student with conflict prevention
