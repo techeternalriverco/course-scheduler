@@ -1,6 +1,7 @@
 package com.example.coursescheduler.controller;
 
 import com.example.coursescheduler.entity.Course;
+import com.example.coursescheduler.service.CourseService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
