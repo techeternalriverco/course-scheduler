@@ -2,6 +2,7 @@ package com.example.coursescheduler.service;
 
 import com.example.coursescheduler.entity.Course;
 import com.example.coursescheduler.repository.CourseRepository;
+import com.example.coursescheduler.repository.EnrolledCourseRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
