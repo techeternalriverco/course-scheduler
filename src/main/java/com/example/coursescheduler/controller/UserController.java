@@ -32,11 +32,16 @@ public class UserController {
     // POST /users/{userId}/courses - Book a course for a student
     @PostMapping("/{userId}/courses")
     public ResponseEntity<String> bookCourse(@PathVariable Long userId, @RequestBody Course course) {
-        boolean isBooked = courseService.bookCourse(userId, course);
-        if (isBooked) {
-            return ResponseEntity.ok("Course booked successfully!");
-        } else {
-            return ResponseEntity.badRequest().body("Course booking failed due to conflicts.");
+        try {
+            boolean isBooked = courseService.bookCourse(userId, course);
+
+            if (isBooked) {
+                return ResponseEntity.ok("Course booked successfully!");
+            } else {
+                return ResponseEntity.status(HttpStatus.CONFLICT).body("Course booking failed due to scheduling conflicts.");
+            }
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
 

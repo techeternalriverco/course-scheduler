@@ -7,7 +7,6 @@ import com.example.coursescheduler.repository.EnrolledCourseRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class CourseService {
@@ -39,13 +38,27 @@ public class CourseService {
                     "Enrollment not found for userId: " + userId + " and courseId: " + courseId
             );
         }
-
         enrolledCourseRepository.delete(enrolledCourse);
     }
 
     // 4. Book a course for a student with conflict prevention
     public boolean bookCourse(Long userId, Course course) {
-        // TODO: conflict prevention
+        Course existedcourse = courseRepository.findById(course.getId())
+                .orElseThrow(() -> new IllegalArgumentException("Course not found with id: " + course.getId()));
+
+        List<Course> enrolledCourses = enrolledCourseRepository.findAllCoursesByUserId(userId);
+
+        for (Course enrolledCourse : enrolledCourses) {
+            if (enrolledCourse.getDayOfWeek() == existedcourse.getDayOfWeek()) {
+                if (existedcourse.getStartTime().isBefore(enrolledCourse.getEndTime()) &&
+                        existedcourse.getEndTime().isAfter(enrolledCourse.getStartTime())) {
+                    return false;
+                }
+            }
+        }
+
+        EnrolledCourse enrolledCourse = new EnrolledCourse(userId, existedcourse.getId());
+        enrolledCourseRepository.save(enrolledCourse);
 
         return true;
     }

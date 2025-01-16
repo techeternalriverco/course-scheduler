@@ -1,6 +1,9 @@
 package com.example.coursescheduler.entity;
 
+import com.example.coursescheduler.enums.DayOfWeek;
 import jakarta.persistence.*;
+import java.time.LocalTime;
+
 @Entity
 @Table(name = "courses")
 public class Course {
@@ -12,16 +15,27 @@ public class Course {
     @Column(nullable = false)
     private String name;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private String time;
+    private DayOfWeek dayOfWeek;
 
+    @Column(nullable = false)
+    private LocalTime startTime;
+
+    @Column(nullable = false)
+    private LocalTime endTime;
+
+    // Constructors
     public Course() {}
 
-    public Course(String name, String time) {
+    public Course(String name, DayOfWeek dayOfWeek, LocalTime startTime, LocalTime endTime) {
         this.name = name;
-        this.time = time;
+        this.dayOfWeek = dayOfWeek;
+        this.startTime = startTime;
+        this.endTime = endTime;
     }
 
+    // Getters and Setters
     public Long getId() {
         return id;
     }
@@ -38,11 +52,27 @@ public class Course {
         this.name = name;
     }
 
-    public String getTime() {
-        return time;
+    public DayOfWeek getDayOfWeek() {
+        return dayOfWeek;
     }
 
-    public void setTime(String time) {
-        this.time = time;
+    public void setDayOfWeek(DayOfWeek dayOfWeek) {
+        this.dayOfWeek = dayOfWeek;
+    }
+
+    public LocalTime getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(LocalTime startTime) {
+        this.startTime = startTime;
+    }
+
+    public LocalTime getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(LocalTime endTime) {
+        this.endTime = endTime;
     }
 }
